@@ -73,9 +73,3 @@ Dependency repair startup command:
 ```bash
 python3 -m pip install --upgrade --target /home/container/vendor/python -r /home/container/requirements.txt && PYTHONPATH=/home/container/vendor/python python3 /home/container/server.py
 ```
-
-## GitHub release
-
-Upload the files from this archive to the repository root (extract the ZIP first). Commit, create tag `v1.0.0`, then create a GitHub Release titled `SoF Logger Web v1.0.0`. Attach this source ZIP if desired. The repo needs no credentials or original executable. The original logger and compatibility dependencies are downloaded by setup.
-
-The MIT license covers this project's web wrapper and setup files only. Original logger rights belong to its author; ncurses and xterm.js retain their respective licenses.
