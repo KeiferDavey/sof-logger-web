@@ -1,0 +1,94 @@
+{
+  "_comment": "Pterodactyl egg for the original SoF logger with web terminal",
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2026-10-03T00:00:00+00:00",
+  "name": "SoF Logger Web",
+  "author": "sof-logger-web@example.com",
+  "description": "Unmodified 2011 SoF logger exposed through an authenticated browser terminal. Upload package before install. Linux amd64 only.",
+  "features": null,
+  "docker_images": {
+    "Python 3.12": "ghcr.io/ptero-eggs/yolks:python_3.12"
+  },
+  "file_denylist": [
+    "logger/sof-logger.cfg"
+  ],
+  "startup": "PYTHONPATH=/home/container/vendor/python python3 server.py",
+  "config": {
+    "files": "{}",
+    "startup": "{\"done\": \"SOF logger web ready on port\"}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\nset -euo pipefail\napt-get update\napt-get install -y ca-certificates curl\ncd /mnt/server\nif [ ! -f setup.sh ]; then echo \"Upload and extract sof-logger-web.zip into server root first, then reinstall.\"; exit 1; fi\nbash setup.sh\n",
+      "container": "python:3.12-slim-bookworm",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "SoF server IP",
+      "description": "IP address or hostname of your SoF game server. Reachable by UDP from this container.",
+      "env_variable": "SOF_SERVER_IP",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "SoF game port",
+      "description": "The game server UDP port, not the logger web port.",
+      "env_variable": "SOF_SERVER_PORT",
+      "default_value": "28910",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|min:1|max:65535",
+      "field_type": "text"
+    },
+    {
+      "name": "SoF RCON password",
+      "description": "Your existing game server RCON password. Keep private.",
+      "env_variable": "SOF_RCON_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:128",
+      "field_type": "text"
+    },
+    {
+      "name": "Web username",
+      "description": "Login username.",
+      "env_variable": "WEB_USER",
+      "default_value": "admin",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:128",
+      "field_type": "text"
+    },
+    {
+      "name": "Web password",
+      "description": "Separate web login password, at least 12 characters.",
+      "env_variable": "WEB_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|min:12|max:128",
+      "field_type": "text"
+    },
+    {
+      "name": "Public URL",
+      "description": "Exact browser origin, e.g. https://logger.sof1.org. Required behind an HTTPS reverse proxy; no trailing path.",
+      "env_variable": "PUBLIC_URL",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string|max:255",
+      "field_type": "text"
+    }
+  ]
+}
